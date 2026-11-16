@@ -1,0 +1,20 @@
+DC.3D.LAB — primeira versão do site
+
+Como publicar no Netlify via GitHub:
+1. Extraia o arquivo ZIP.
+2. No GitHub, abra o repositório dc3dlab-site.
+3. Use Add file > Upload files e envie TODOS os arquivos e a pasta assets (não envie a pasta externa dc3dlab-site como uma pasta dentro do repositório; envie o conteúdo dela).
+4. Faça Commit changes na branch main.
+5. Volte ao Netlify. Como o repositório já está conectado, ele detectará o commit e iniciará a publicação automaticamente. Se não iniciar, clique em Deploy site.
+
+Configuração de build para esta versão estática:
+- Base directory: vazio
+- Build command: vazio
+- Publish directory: . (ou vazio, se o Netlify aceitar o padrão)
+- Functions directory: pode deixar em branco; não há funções nesta versão.
+
+Importante:
+- Catálogo inicial inclui os produtos e valores recuperados das conversas. Confirme nomes, preços e fotos antes de divulgar.
+- Carrinho envia o pedido pelo WhatsApp; não processa pagamento online.
+- Frete e prazo são combinados pelo WhatsApp.
+- Painel administrativo, cálculo automático de frete, pagamento e cadastro online ainda não estão implementados nesta primeira versão.
