@@ -8,3 +8,11 @@
   height: 100%;
   object-fit: contain !important;
 }
+.product-image {
+  overflow: hidden;
+}
+
+.product-image img {
+  transform: scale(1.15);
+  transform-origin: center center;
+}
