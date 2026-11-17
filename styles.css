@@ -2,3 +2,9 @@
 
 /* Corrige o estado inicial e o fechamento do carrinho. */
 .cart-overlay[hidden]{display:none!important}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+}
