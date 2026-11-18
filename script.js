@@ -6,7 +6,12 @@ const products = [
  {id:5,name:'Mapa Mirage',category:'Mundo Gamer',price:70,image:'assets/mirage.jpg',description:'Mapa decorativo inspirado no cenário Mirage de CS2.',dimensions:'A confirmar',colors:[]},
  {id:6,name:'Faca Kukri',category:'Mundo Gamer',price:50,image:'assets/kukri.jpg',description:'Peça decorativa inspirada na faca Kukri do universo gamer.',dimensions:'A confirmar',colors:[]},
  {id:7,name:'Santa Ceia',category:'Artigos Religiosos',price:90,image:'assets/santa-ceia.jpg',description:'Peça decorativa religiosa impressa em 3D.',dimensions:'A confirmar',colors:[]},
- {id:8,name:'Porta-terço 1',category:'Artigos Religiosos',price:70,image:'assets/porta-terco-1.jpg',description:'Porta-terço decorativo.',dimensions:'A confirmar',colors:[]},
+  {id:8,name:'Porta-terço 1',category:'Artigos Religiosos',price:70,image:'assets/porta-terco-1-cinza.jpeg',description:'Porta-terço decorativo em formato de coração, com imagem de Nossa Senhora e espaço para acomodar o terço.',dimensions:'A confirmar',colors:['Cinza','Branco mármore','Rosa-claro','Branco'],variants:[
+  {name:'Cinza',images:['assets/porta-terco-1-cinza.jpeg']},
+  {name:'Branco',images:['assets/porta-terco-1-branco.jpeg']},
+  {name:'Branco mármore',images:['assets/porta-terco-1-marmore.jpeg']},
+  {name:'Rosa-claro',images:['assets/porta-terco-1-rosa.jpeg']}
+ ]},
  {id:9,name:'Porta-terço 2',category:'Artigos Religiosos',price:60,image:'assets/porta-terco-2.jpg',description:'Porta-terço decorativo.',dimensions:'A confirmar',colors:[]},
  {id:10,name:'Mascote Palmeiras',category:'Mascotes times',price:160,image:'assets/palmeiras.jpg',note:'Valor por unidade',description:'Mascote de time impresso em 3D.',dimensions:'A confirmar',colors:[]},
  {id:11,name:'Mascote Flamengo',category:'Mascotes times',price:160,image:'assets/flamengo.jpg',note:'Valor por unidade',description:'Mascote de time impresso em 3D.',dimensions:'A confirmar',colors:[]},
@@ -48,7 +53,11 @@ function openProduct(id){
  document.querySelector('#detail-price').textContent=p.price===null?'Sob orçamento':money(p.price);
  document.querySelector('#detail-description').textContent=p.description||'Descrição em atualização.';
  document.querySelector('#detail-dimensions').textContent=p.dimensions||'A confirmar';
- const color=document.querySelector('#detail-color');color.innerHTML='<option value="">Consultar disponibilidade</option>'+(p.colors||[]).map(c=>`<option>${c}</option>`).join('');
+ const color=document.querySelector('#detail-color');
+ const variants=p.variants||[];
+ color.innerHTML=variants.length?variants.map((v,i)=>`<option value="${v.name}" ${i===0?'selected':''}>${v.name}</option>`).join(''):'<option value="">Consultar disponibilidade</option>'+(p.colors||[]).map(c=>`<option>${c}</option>`).join('');
+ const updateVariantImage=()=>{const variant=variants.find(v=>v.name===color.value);const image=variant&&variant.images&&variant.images.length?variant.images[0]:p.image;document.querySelector('#detail-photo').src=image||'';};
+ color.onchange=updateVariantImage;updateVariantImage();
  document.querySelector('#detail-qty').value=1;document.querySelector('#detail-coupon').value='';
  document.querySelector('#coupon-feedback').textContent='Cupons válidos são específicos para cada produto.';
  document.querySelector('#detail-total').textContent=p.price===null?'Sob orçamento':money(p.price);
