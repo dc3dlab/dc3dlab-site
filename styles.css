@@ -15,4 +15,33 @@
 .product-image img {
   transform: scale(1.15);
   transform-origin: center center;
-}
+}  
+/* Página de detalhes do produto */
+.product-clickable{cursor:pointer}
+.product-clickable:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.product-modal[hidden]{display:none!important}
+.product-modal{position:fixed;inset:0;z-index:20;background:#000d;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto}
+.product-modal-panel{position:relative;width:min(1000px,100%);max-height:92vh;overflow:auto;background:#121419;border:1px solid #383d48;border-radius:14px;box-shadow:0 24px 80px #000b;padding:28px}
+.detail-close{position:absolute;right:16px;top:12px;border:0;background:#252a33;color:white;border-radius:50%;width:38px;height:38px;font-size:25px;cursor:pointer;z-index:1}
+.detail-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:32px;align-items:start}
+.detail-photo-wrap{background:radial-gradient(circle at center,#303640,#171a20 72%);border:1px solid #292d35;border-radius:10px;min-height:440px;display:flex;align-items:center;justify-content:center;padding:18px}
+.detail-photo-wrap img{display:block;width:100%;height:440px;object-fit:contain}
+.detail-content{padding:18px 8px 8px}
+.detail-content h2{font-size:clamp(28px,4vw,40px);margin:10px 0}
+.detail-price{font-size:28px;font-weight:900;margin:12px 0 18px}
+.detail-description{color:#c4c7ce;line-height:1.7}
+.detail-spec{display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin:18px 0}
+.detail-spec span{color:var(--muted);text-align:right}
+.detail-label{display:block;font-size:13px;font-weight:700;margin:14px 0 7px}
+.detail-content select,.detail-content input{width:100%;background:#1b1f27;border:1px solid #3b414d;color:white;border-radius:6px;padding:12px}
+.coupon-area{margin-top:18px;padding:14px;border:1px solid #343943;border-radius:8px;background:#171a20}
+.coupon-row{display:flex;gap:8px}
+.coupon-row button{background:var(--red);border:0;color:white;border-radius:6px;padding:0 16px;font-weight:800;cursor:pointer}
+.coupon-area small{display:block;color:var(--muted);margin-top:8px;line-height:1.5}
+.detail-total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);margin-top:18px;padding-top:16px}
+.detail-total strong{font-size:23px}
+.detail-content .full{margin-top:14px}
+.detail-whatsapp{width:100%;margin-top:9px;background:transparent;border:1px solid #3b414d;color:white;border-radius:6px;padding:12px;font-weight:700;cursor:pointer}
+.detail-whatsapp:hover{border-color:var(--red);color:#ff737a}
+@media(max-width:720px){.product-modal{padding:10px;align-items:flex-start}.product-modal-panel{padding:18px;margin:10px 0;max-height:none}.detail-layout{grid-template-columns:1fr;gap:16px}.detail-photo-wrap{min-height:280px}.detail-photo-wrap img{height:300px}.detail-content{padding:4px 0 0}.detail-close{position:sticky;float:right;top:0}}
+
