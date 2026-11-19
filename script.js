@@ -105,7 +105,57 @@ function renderProducts(){const q=search.value.toLocaleLowerCase('pt-BR');const 
  grid.querySelectorAll('[data-detail]').forEach(card=>{card.onclick=e=>{if(e.target.closest('[data-add]'))return;openProduct(Number(card.dataset.detail))};card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openProduct(Number(card.dataset.detail))}}});
  grid.querySelectorAll('[data-add]').forEach(b=>b.onclick=e=>{e.stopPropagation();openProduct(Number(b.dataset.add))});
 }
-function renderCart(){document.querySelector('#cart-count').textContent=cart.reduce((s,p)=>s+p.qty,0);document.querySelector('#cart-items').innerHTML=cart.length?cart.map(p=>`<div class="cart-row"><div><b>${p.name}</b><small>${p.qty} × ${money(p.unitPrice||p.price)}${p.discount?` · cupom ${p.discount}%`:''}${p.colorValue?` · ${p.colorValue}`:''}</small></div><div><b>${money(p.qty*(p.unitPrice||p.price))}</b><button class="remove" data-remove="${p.key||p.id}">Remover</button></div></div>`).join(''):'<p class="empty">Seu carrinho está vazio.</p>';document.querySelector('#cart-total').textContent=money(cart.reduce((s,p)=>s+(p.unitPrice||p.price)*p.qty,0));document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{cart=cart.filter(p=>(p.key||String(p.id))!==b.dataset.remove);renderCart()})}
+
+function renderCart(){
+  document.querySelector('#cart-count').textContent=cart.reduce((s,p)=>s+p.qty,0);
+
+  document.querySelector('#cart-items').innerHTML=cart.length?cart.map(p=>{
+    const variant=p.colors?.find(v=>v.name===p.colorValue);
+    const image=variant?.images?.[0]||p.image||'';
+    const itemKey=p.key||p.id;
+
+    return `
+      <div class="cart-row">
+        <img class="cart-product-image" src="${image}" alt="${p.name}">
+        <div class="cart-product-info">
+          <b>${p.name}</b>
+          <small>${p.colorValue||''}</small>
+          <small>${money(p.unitPrice||p.price)} por unidade</small>
+          <div class="cart-quantity">
+            <button data-cart-qty="${itemKey}" data-delta="-1">−</button>
+            <span>${p.qty}</span>
+            <button data-cart-qty="${itemKey}" data-delta="1">+</button>
+          </div>
+        </div>
+        <div class="cart-product-price">
+          <b>${money(p.qty*(p.unitPrice||p.price))}</b>
+          <button class="remove" data-remove="${itemKey}">Remover</button>
+        </div>
+      </div>
+    `;
+  }).join(''):'<p class="empty">Seu carrinho está vazio.</p>';
+
+  document.querySelector('#cart-total').textContent=money(
+    cart.reduce((s,p)=>s+(p.unitPrice||p.price)*p.qty,0)
+  );
+
+  document.querySelectorAll('[data-cart-qty]').forEach(b=>{
+    b.onclick=()=>{
+      const item=cart.find(p=>(p.key||String(p.id))===b.dataset.cartQty);
+      if(!item)return;
+      item.qty=Math.max(1,item.qty+Number(b.dataset.delta));
+      renderCart();
+    };
+  });
+
+  document.querySelectorAll('[data-remove]').forEach(b=>{
+    b.onclick=()=>{
+      cart=cart.filter(p=>(p.key||String(p.id))!==b.dataset.remove);
+      renderCart();
+    };
+  });
+}
+
 const overlay=document.querySelector('#cart-overlay');document.querySelector('#open-cart').onclick=()=>{overlay.hidden=false;document.body.style.overflow='hidden'};document.querySelector('#close-cart').onclick=()=>{overlay.hidden=true;document.body.style.overflow=''};overlay.onclick=e=>{if(e.target===overlay){overlay.hidden=true;document.body.style.overflow=''}};search.oninput=renderProducts;
 document.querySelector('#checkout').onclick=()=>{if(!cart.length){alert('Adicione pelo menos um produto ao carrinho.');return}const lines=cart.map(p=>`${p.qty}x ${p.name}${p.colorValue?' ('+p.colorValue+')':''} — ${money(p.qty*(p.unitPrice||p.price))}${p.discount?' (cupom '+p.discount+'%)':''}`).join('\n');const total=cart.reduce((s,p)=>s+(p.unitPrice||p.price)*p.qty,0);window.open('https://wa.me/5547997619228?text='+encodeURIComponent(`Olá! Quero fazer este pedido na DC.3D.LAB:\n${lines}\n\nTotal: ${money(total)}\nPor favor, confirme disponibilidade e entrega.`),'_blank')};
 document.querySelector('#year').textContent=new Date().getFullYear();renderFilters();renderProducts();renderCart();
