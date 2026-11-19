@@ -33,12 +33,33 @@ function ensureDetailModal(){
  <div class="detail-content"><span class="tag" id="detail-category"></span><h2 id="detail-name"></h2><div class="detail-price" id="detail-price"></div>
  <p class="detail-description" id="detail-description"></p><div class="detail-spec"><b>Dimensões</b><span id="detail-dimensions"></span></div>
  <label class="detail-label" for="detail-color">Cor / opção</label><select id="detail-color"><option value="">Consultar disponibilidade</option></select>
- <label class="detail-label" for="detail-qty">Quantidade</label><input id="detail-qty" type="number" min="1" value="1">
+ <label class="detail-label" for="detail-qty">Quantidade</label><div class="quantity-picker">
+  <div class="quantity-buttons">
+    <button type="button" data-qty="1">1</button>
+    <button type="button" data-qty="2">2</button>
+    <button type="button" data-qty="3">3</button>
+    <button type="button" data-qty="4">4</button>
+    <button type="button" data-qty="5">5</button>
+  </div>
+  <input id="detail-qty" type="number" min="1" value="1" placeholder="Outra quantidade">
+</div>
  <div class="coupon-area"><label class="detail-label" for="detail-coupon">Cupom deste produto</label><div class="coupon-row"><input id="detail-coupon" type="text" placeholder="Digite seu cupom"><button id="apply-coupon" type="button">Aplicar</button></div><small id="coupon-feedback">Cupons válidos são específicos para cada produto.</small></div>
  <div class="detail-total"><span>Total deste produto</span><strong id="detail-total"></strong></div><button class="primary full" id="detail-add">Adicionar ao carrinho</button>
  <button class="detail-whatsapp" id="detail-whatsapp">Consultar pelo WhatsApp</button>
  </div></div></section>`;
  document.body.appendChild(modal);
+ modal.querySelectorAll('[data-qty]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    const input=modal.querySelector('#detail-qty');
+    input.value=button.dataset.qty;
+    input.dispatchEvent(new Event('input',{bubbles:true}));
+    modal.querySelectorAll('[data-qty]').forEach(b=>b.classList.toggle('active',b===button));
+  });
+});
+modal.querySelector('#detail-qty').addEventListener('input',()=>{
+  const input=modal.querySelector('#detail-qty');
+  modal.querySelectorAll('[data-qty]').forEach(b=>b.classList.toggle('active',b.dataset.qty===input.value));
+});
  const close=()=>{modal.hidden=true;document.body.style.overflow=''};
  modal.addEventListener('click',e=>{if(e.target===modal)close()});
  modal.querySelector('#detail-close').onclick=close;
