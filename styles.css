@@ -45,3 +45,58 @@
 .detail-whatsapp:hover{border-color:var(--red);color:#ff737a}
 @media(max-width:720px){.product-modal{padding:10px;align-items:flex-start}.product-modal-panel{padding:18px;margin:10px 0;max-height:none}.detail-layout{grid-template-columns:1fr;gap:16px}.detail-photo-wrap{min-height:280px}.detail-photo-wrap img{height:300px}.detail-content{padding:4px 0 0}.detail-close{position:sticky;float:right;top:0}}
 
+
+/* Seletor moderno de quantidade */
+.quantity-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.quantity-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.quantity-buttons button {
+  min-height: 54px;
+  border: 1px solid #454b57;
+  border-radius: 10px;
+  background: #252932;
+  color: #f5f5f7;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.quantity-buttons button:hover {
+  border-color: #ed202b;
+}
+
+.quantity-buttons button.active {
+  background: #ed202b;
+  border-color: #ed202b;
+  color: #fff;
+  box-shadow: 0 4px 14px #ed202b44;
+}
+
+#detail-qty {
+  width: 100%;
+  min-height: 54px;
+  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid #454b57;
+  border-radius: 10px;
+  background: #1b1f27;
+  color: #fff;
+  font-size: 16px;
+}
+
+#detail-qty::placeholder {
+  color: #9aa0aa;
+}
+
+
