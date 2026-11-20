@@ -158,53 +158,109 @@ function renderCart(){
 
 const overlay=document.querySelector('#cart-overlay');document.querySelector('#open-cart').onclick=()=>{overlay.hidden=false;document.body.style.overflow='hidden'};document.querySelector('#close-cart').onclick=()=>{overlay.hidden=true;document.body.style.overflow=''};overlay.onclick=e=>{if(e.target===overlay){overlay.hidden=true;document.body.style.overflow=''}};search.oninput=renderProducts;
 
+
 document.querySelector('#checkout').onclick=()=>{
   if(!cart.length){
     alert('Adicione pelo menos um produto ao carrinho.');
     return;
   }
 
-  const name=prompt('Qual é o seu nome?');
-  if(!name || !name.trim()) return;
+  const modal=document.createElement('div');
+  modal.className='checkout-overlay';
 
-  const delivery=prompt(
-    'Como deseja receber seu pedido?\n\n1 - Retirar\n2 - Receber em casa'
-  );
+  modal.innerHTML=`
+    <div class="checkout-modal">
+      <button class="checkout-close" type="button">&times;</button>
 
-  if(delivery!=='1' && delivery!=='2'){
-    alert('Escolha 1 para retirada ou 2 para entrega.');
-    return;
-  }
+      <h2>Finalizar pedido</h2>
+      <p class="checkout-subtitle">Só falta preencher seus dados!</p>
 
-  let address='';
+      <label for="checkout-name">Seu nome</label>
+      <input id="checkout-name" type="text" placeholder="Digite seu nome">
 
-  if(delivery==='2'){
-    address=prompt('Informe seu endereço completo e CEP:');
-    if(!address || !address.trim()) return;
-  }
+      <label>Como deseja receber?</label>
+      <div class="checkout-options">
+        <label class="checkout-option">
+          <input type="radio" name="checkout-delivery" value="1" checked>
+          <span>Retirar</span>
+        </label>
+        <label class="checkout-option">
+          <input type="radio" name="checkout-delivery" value="2">
+          <span>Receber em casa</span>
+        </label>
+      </div>
 
-  const lines=cart.map(p=>{
-    const unit=p.unitPrice||p.price;
-    const subtotal=unit*p.qty;
+      <div id="checkout-address-area" hidden>
+        <label for="checkout-address">Endereço completo e CEP</label>
+        <textarea id="checkout-address" placeholder="Rua, número, bairro, cidade e CEP"></textarea>
+      </div>
 
-    return `• ${p.qty}x ${p.name}
- ${p.colorValue?'Cor: '+p.colorValue:''}
-  Unitário: ${money(unit)}
-  Subtotal: ${money(subtotal)}${p.discount?' (cupom '+p.discount+'%)':''}`;
-  }).join('\n\n');
+      <button class="checkout-submit" type="button">
+        Enviar pedido pelo WhatsApp
+      </button>
+    </div>
+  `;
 
-  const total=cart.reduce(
-    (s,p)=>s+(p.unitPrice||p.price)*p.qty,0
-  );
+  document.body.appendChild(modal);
 
-  const method=delivery==='1'?'Retirada':'Entrega';
-  const deliveryInfo=delivery==='1'
-    ?'Retirada a combinar'
-    :`Endereço: ${address}\nFrete: a combinar`;
+  const close=()=>{
+    modal.remove();
+    document.body.style.overflow='';
+  };
 
-  const message=`Olá! Quero fazer este pedido na DC.3D.LAB!
+  document.body.style.overflow='hidden';
 
-CLIENTE: ${name.trim()}
+  modal.querySelector('.checkout-close').onclick=close;
+
+  modal.addEventListener('click',e=>{
+    if(e.target===modal) close();
+  });
+
+  const addressArea=modal.querySelector('#checkout-address-area');
+
+  modal.querySelectorAll('[name="checkout-delivery"]').forEach(radio=>{
+    radio.onchange=()=>{
+      addressArea.hidden=radio.value!=='2';
+    };
+  });
+
+  modal.querySelector('.checkout-submit').onclick=()=>{
+    const name=modal.querySelector('#checkout-name').value.trim();
+    const delivery=modal.querySelector('[name="checkout-delivery"]:checked').value;
+    const address=modal.querySelector('#checkout-address').value.trim();
+
+    if(!name){
+      alert('Informe seu nome.');
+      return;
+    }
+
+    if(delivery==='2' && !address){
+      alert('Informe seu endereço completo e CEP.');
+      return;
+    }
+
+    const lines=cart.map(p=>{
+      const unit=p.unitPrice||p.price;
+      const subtotal=unit*p.qty;
+
+      return `• ${p.qty}x ${p.name}
+${p.colorValue?'Cor: '+p.colorValue+'\n':''}Unitário: ${money(unit)}
+Subtotal: ${money(subtotal)}${p.discount?' (cupom '+p.discount+'%)':''}`;
+    }).join('\n\n');
+
+    const total=cart.reduce(
+      (s,p)=>s+(p.unitPrice||p.price)*p.qty,0
+    );
+
+    const method=delivery==='1'?'Retirada':'Entrega';
+
+    const deliveryInfo=delivery==='1'
+      ?'Retirada a combinar'
+      :`Endereço: ${address}\nFrete: a combinar`;
+
+    const finalMessage=`Olá! Quero fazer este pedido na DC.3D.LAB!
+
+CLIENTE: ${name}
 
 PEDIDO:
 ${lines}
@@ -214,12 +270,18 @@ TOTAL DOS PRODUTOS: ${money(total)}
 FORMA DE RECEBIMENTO: ${method}
 ${deliveryInfo}
 
-      ${delivery==='2'?'Por favor, confirme o pedido, o prazo de entrega e o valor do frete. Obrigado!':'Por favor, confirme o pedido e o prazo de retirada. Obrigado!'}`;
+${delivery==='2'
+?'Por favor, confirme o pedido, o prazo de entrega e o valor do frete. Obrigado!'
+:'Por favor, confirme o pedido e o prazo de retirada. Obrigado!'}`;
 
-  window.open(
-    'https://wa.me/5547997619228?text='+encodeURIComponent(message),
-    '_blank'
-  );
+    window.open(
+      'https://wa.me/5547997619228?text='+encodeURIComponent(finalMessage),
+      '_blank'
+    );
+
+    close();
+  };
 };
+
 
 document.querySelector('#year').textContent=new Date().getFullYear();renderFilters();renderProducts();renderCart();
