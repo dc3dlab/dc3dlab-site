@@ -188,7 +188,7 @@ document.querySelector('#checkout').onclick=()=>{
     const subtotal=unit*p.qty;
 
     return `• ${p.qty}x ${p.name}
-  Cor: ${p.colorValue||'Não especificada'}
+ ${p.colorValue?'Cor: '+p.colorValue:''}
   Unitário: ${money(unit)}
   Subtotal: ${money(subtotal)}${p.discount?' (cupom '+p.discount+'%)':''}`;
   }).join('\n\n');
@@ -214,7 +214,7 @@ TOTAL DOS PRODUTOS: ${money(total)}
 FORMA DE RECEBIMENTO: ${method}
 ${deliveryInfo}
 
-Por favor, confirme o pedido, o prazo e o valor do frete. Obrigado!`;
+      ${delivery==='2'?'Por favor, confirme o pedido, o prazo de entrega e o valor do frete. Obrigado!':'Por favor, confirme o pedido e o prazo de retirada. Obrigado!'}`;
 
   window.open(
     'https://wa.me/5547997619228?text='+encodeURIComponent(message),
