@@ -157,5 +157,69 @@ function renderCart(){
 }
 
 const overlay=document.querySelector('#cart-overlay');document.querySelector('#open-cart').onclick=()=>{overlay.hidden=false;document.body.style.overflow='hidden'};document.querySelector('#close-cart').onclick=()=>{overlay.hidden=true;document.body.style.overflow=''};overlay.onclick=e=>{if(e.target===overlay){overlay.hidden=true;document.body.style.overflow=''}};search.oninput=renderProducts;
-document.querySelector('#checkout').onclick=()=>{if(!cart.length){alert('Adicione pelo menos um produto ao carrinho.');return}const lines=cart.map(p=>`${p.qty}x ${p.name}${p.colorValue?' ('+p.colorValue+')':''} — ${money(p.qty*(p.unitPrice||p.price))}${p.discount?' (cupom '+p.discount+'%)':''}`).join('\n');const total=cart.reduce((s,p)=>s+(p.unitPrice||p.price)*p.qty,0);window.open('https://wa.me/5547997619228?text='+encodeURIComponent(`Olá! Quero fazer este pedido na DC.3D.LAB:\n${lines}\n\nTotal: ${money(total)}\nPor favor, confirme disponibilidade e entrega.`),'_blank')};
+
+document.querySelector('#checkout').onclick=()=>{
+  if(!cart.length){
+    alert('Adicione pelo menos um produto ao carrinho.');
+    return;
+  }
+
+  const name=prompt('Qual é o seu nome?');
+  if(!name || !name.trim()) return;
+
+  const delivery=prompt(
+    'Como deseja receber seu pedido?\n\n1 - Retirar\n2 - Receber em casa'
+  );
+
+  if(delivery!=='1' && delivery!=='2'){
+    alert('Escolha 1 para retirada ou 2 para entrega.');
+    return;
+  }
+
+  let address='';
+
+  if(delivery==='2'){
+    address=prompt('Informe seu endereço completo e CEP:');
+    if(!address || !address.trim()) return;
+  }
+
+  const lines=cart.map(p=>{
+    const unit=p.unitPrice||p.price;
+    const subtotal=unit*p.qty;
+
+    return `• ${p.qty}x ${p.name}
+  Cor: ${p.colorValue||'Não especificada'}
+  Unitário: ${money(unit)}
+  Subtotal: ${money(subtotal)}${p.discount?' (cupom '+p.discount+'%)':''}`;
+  }).join('\n\n');
+
+  const total=cart.reduce(
+    (s,p)=>s+(p.unitPrice||p.price)*p.qty,0
+  );
+
+  const method=delivery==='1'?'Retirada':'Entrega';
+  const deliveryInfo=delivery==='1'
+    ?'Retirada a combinar'
+    :`Endereço: ${address}\nFrete: a combinar`;
+
+  const message=`Olá! Quero fazer este pedido na DC.3D.LAB!
+
+CLIENTE: ${name.trim()}
+
+PEDIDO:
+${lines}
+
+TOTAL DOS PRODUTOS: ${money(total)}
+
+FORMA DE RECEBIMENTO: ${method}
+${deliveryInfo}
+
+Por favor, confirme o pedido, o prazo e o valor do frete. Obrigado!`;
+
+  window.open(
+    'https://wa.me/5547997619228?text='+encodeURIComponent(message),
+    '_blank'
+  );
+};
+
 document.querySelector('#year').textContent=new Date().getFullYear();renderFilters();renderProducts();renderCart();
