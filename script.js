@@ -77,7 +77,7 @@ function openProduct(id){
  const color=document.querySelector('#detail-color');
  const variants=p.variants||[];
  color.innerHTML=variants.length?variants.map((v,i)=>`<option value="${v.name}" ${i===0?'selected':''}>${v.name}</option>`).join(''):'<option value="">Consultar disponibilidade</option>'+(p.colors||[]).map(c=>`<option>${c}</option>`).join('');
- const updateVariantImage=()=>{const variant=(p.colors||[]).find(v=>v.name===color.value);const image=variant&&variant.images&&variant.images.length?variant.images[0]:p.image;document.querySelector('#detail-photo').src=image||'';};
+ const updateVariantImage=()=>{const variant=(p.variants||[]).find(v=>v.name===color.value);const image=variant?.images?.[0]||p.image;document.querySelector('#detail-photo').src=image||'';};
  color.onchange=updateVariantImage;updateVariantImage();
  document.querySelector('#detail-qty').value=1;document.querySelector('#detail-coupon').value='';
  document.querySelector('#coupon-feedback').textContent='Cupons válidos são específicos para cada produto.';
@@ -93,7 +93,7 @@ function openProduct(id){
  document.querySelector('#detail-add').onclick=()=>{
   if(p.price===null){window.open('https://wa.me/5547997619228?text='+encodeURIComponent('Olá! Gostaria de solicitar um orçamento para '+p.name+'.'),'_blank');return}
   const qty=Math.max(1,Number(document.querySelector('#detail-qty').value)||1),unitPrice=p.price*(1-appliedDiscount/100),colorValue=color.value;
-const variant=p.colors?.find(v=>String(v.name||'').trim().toLowerCase()===String(colorValue||'').trim().toLowerCase());
+const variant=(p.variants||[]).find(v=>String(v.name||'').trim().toLowerCase()===String(colorValue||'').trim().toLowerCase());
 const selectedImage=variant?.images?.[0]||p.image;
 const key=p.id+'-'+colorValue+'-'+appliedDiscount;
 const item=cart.find(x=>x.key===key);
@@ -113,8 +113,8 @@ function renderCart(){
   document.querySelector('#cart-count').textContent=cart.reduce((s,p)=>s+p.qty,0);
 
   document.querySelector('#cart-items').innerHTML=cart.length?cart.map(p=>{
-    const variant=p.colors?.find(v=>String(v.name||'').trim().toLowerCase()===String(p.colorValue||'').trim().toLowerCase());
-    const image=p.cartImage||variant?.images?.[0]||p.image||'';
+    const variant=(p.variants||[]).find(v=>String(v.name||'').trim().toLowerCase()===String(p.colorValue||'').trim().toLowerCase());
+const image=variant?.images?.[0]||p.cartImage||p.image||'';
     const itemKey=p.key||p.id;
 
     return `
