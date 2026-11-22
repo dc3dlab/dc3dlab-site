@@ -111,7 +111,7 @@ function renderCart(){
 
   document.querySelector('#cart-items').innerHTML=cart.length?cart.map(p=>{
     const variant=p.colors?.find(v=>v.name.trim().toLowerCase()===String(p.colorValue||'').trim().toLowerCase());
-    const image=variant?.images?.find(img=>img.toLowerCase().includes(String(p.colorValue||'').toLowerCase()))||variant?.images?.[0]||p.image||'';
+    const image=variant?.images?.[0]||p.image||'';
     const itemKey=p.key||p.id;
 
     return `
