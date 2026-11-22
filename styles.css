@@ -410,3 +410,39 @@
 #cart-items .cart-product-info {
   min-width: 0;
 }
+
+
+/* ACABAMENTO PROFISSIONAL DO CARRINHO */
+#cart-items .cart-row {
+  background: #171a21;
+  border: 1px solid #292e38;
+  border-radius: 14px;
+  padding: 18px 14px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+#cart-items .cart-row:hover {
+  background: #1c2029;
+  border-color: #ed202b;
+}
+
+#cart-items .cart-product-info {
+  gap: 10px;
+}
+
+#cart-items .cart-quantity {
+  gap: 10px;
+}
+
+#cart-items .cart-product-price {
+  gap: 10px;
+  align-items: flex-end;
+}
+
+@media (max-width: 480px) {
+  #cart-items .cart-row {
+    padding: 14px 10px;
+    gap: 10px;
+  }
+}
