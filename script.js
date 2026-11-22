@@ -93,8 +93,11 @@ function openProduct(id){
  document.querySelector('#detail-add').onclick=()=>{
   if(p.price===null){window.open('https://wa.me/5547997619228?text='+encodeURIComponent('Olá! Gostaria de solicitar um orçamento para '+p.name+'.'),'_blank');return}
   const qty=Math.max(1,Number(document.querySelector('#detail-qty').value)||1),unitPrice=p.price*(1-appliedDiscount/100),colorValue=color.value;
-  const key=p.id+'-'+colorValue+'-'+appliedDiscount;const item=cart.find(x=>x.key===key);
-  item?item.qty+=qty:cart.push({...p,key,qty,unitPrice,colorValue,discount:appliedDiscount});
+const variant=p.colors?.find(v=>String(v.name||'').trim().toLowerCase()===String(colorValue||'').trim().toLowerCase());
+const selectedImage=variant?.images?.[0]||p.image;
+const key=p.id+'-'+colorValue+'-'+appliedDiscount;
+const item=cart.find(x=>x.key===key);
+if(item){item.qty+=qty;}else{cart.push({...p,key,qty,unitPrice,colorValue,cartImage:selectedImage,discount:appliedDiscount});}
   renderCart();modal.hidden=true;document.body.style.overflow='';
  };
  document.querySelector('#detail-whatsapp').onclick=()=>window.open('https://wa.me/5547997619228?text='+encodeURIComponent('Olá! Tenho interesse em '+p.name+'. Gostaria de mais informações.'),'_blank');
@@ -111,7 +114,7 @@ function renderCart(){
 
   document.querySelector('#cart-items').innerHTML=cart.length?cart.map(p=>{
     const variant=p.colors?.find(v=>String(v.name||'').trim().toLowerCase()===String(p.colorValue||'').trim().toLowerCase());
-    const image=variant?.images?.[0]||p.image||'';
+    const image=p.cartImage||variant?.images?.[0]||p.image||'';
     const itemKey=p.key||p.id;
 
     return `
