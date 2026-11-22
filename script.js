@@ -45,7 +45,6 @@ function ensureDetailModal(){
 </div>
  <div class="coupon-area"><label class="detail-label" for="detail-coupon">Cupom deste produto</label><div class="coupon-row"><input id="detail-coupon" type="text" placeholder="Digite seu cupom"><button id="apply-coupon" type="button">Aplicar</button></div><small id="coupon-feedback">Cupons válidos são específicos para cada produto.</small></div>
  <div class="detail-total"><span>Total deste produto</span><strong id="detail-total"></strong></div><button class="primary full" id="detail-add">Adicionar ao carrinho</button>
- <button class="detail-whatsapp" id="detail-whatsapp">Consultar pelo WhatsApp</button>
  </div></div></section>`;
  document.body.appendChild(modal);
  modal.querySelectorAll('[data-qty]').forEach(button=>{
@@ -100,7 +99,6 @@ const item=cart.find(x=>x.key===key);
 if(item){item.qty+=qty;}else{cart.push({...p,key,qty,unitPrice,colorValue,cartImage:selectedImage,discount:appliedDiscount});}
   renderCart();modal.hidden=true;document.body.style.overflow='';
  };
- document.querySelector('#detail-whatsapp').onclick=()=>window.open('https://wa.me/5547997619228?text='+encodeURIComponent('Olá! Tenho interesse em '+p.name+'. Gostaria de mais informações.'),'_blank');
  modal.hidden=false;document.body.style.overflow='hidden';
 }
 function renderFilters(){filters.innerHTML=categories.map(c=>`<button class="filter ${active===c?'active':''}" data-cat="${c}">${c}</button>`).join('');filters.querySelectorAll('button').forEach(b=>b.onclick=()=>{active=b.dataset.cat;renderFilters();renderProducts()})}
