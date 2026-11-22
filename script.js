@@ -77,7 +77,7 @@ function openProduct(id){
  const color=document.querySelector('#detail-color');
  const variants=p.variants||[];
  color.innerHTML=variants.length?variants.map((v,i)=>`<option value="${v.name}" ${i===0?'selected':''}>${v.name}</option>`).join(''):'<option value="">Consultar disponibilidade</option>'+(p.colors||[]).map(c=>`<option>${c}</option>`).join('');
- const updateVariantImage=()=>{const variant=variants.find(v=>v.name===color.value);const image=variant&&variant.images&&variant.images.length?variant.images[0]:p.image;document.querySelector('#detail-photo').src=image||'';};
+ const updateVariantImage=()=>{const variant=(p.colors||[]).find(v=>v.name===color.value);const image=variant&&variant.images&&variant.images.length?variant.images[0]:p.image;document.querySelector('#detail-photo').src=image||'';};
  color.onchange=updateVariantImage;updateVariantImage();
  document.querySelector('#detail-qty').value=1;document.querySelector('#detail-coupon').value='';
  document.querySelector('#coupon-feedback').textContent='Cupons válidos são específicos para cada produto.';
