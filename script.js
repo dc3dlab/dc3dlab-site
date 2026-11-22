@@ -124,6 +124,7 @@ const image=variant?.images?.[0]||p.cartImage||p.image||'';
           <b>${p.name}</b>
           <small>${p.colorValue||''}</small>
           <small>${money(p.unitPrice||p.price)} por unidade</small>
+          <small class="cart-subtotal">Subtotal: ${money((p.unitPrice||p.price)*p.qty)}</small>
           <div class="cart-quantity">
             <button data-cart-qty="${itemKey}" data-delta="-1">−</button>
             <span>${p.qty}</span>
