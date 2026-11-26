@@ -1,5 +1,5 @@
 const products = [
- {id:1,name:'Presépio',category:'Natal',price:60,image:'assets/presepio.jpg',description:'Peça decorativa impressa em 3D.',dimensions:'A confirmar',colors:[]},
+ {id:1,name:'Presépio',category:'Natal',price:60,image:'assets/presepio.jpg',description:'Peça decorativa impressa em 3D.',dimensions:'A confirmar',colors:['Original','Rosa'],variants:[{name:'Original',images:['assets/presepio.jpg']},{name:'Rosa',images:['assets/presepio-rosa.jpg']}]},
  {id:2,name:'Porsche GT3',category:'Porta-Chaves',price:130,image:'assets/porsche-gt3.png',description:'Porta-chaves com visual inspirado no Porsche GT3.',dimensions:'A confirmar',colors:[]},
  {id:4,name:'Mapa Dust 2',category:'Mundo Gamer',price:70,image:'assets/dust2.jpg',description:'Mapa decorativo inspirado no cenário Dust 2 de CS2.',dimensions:'A confirmar',colors:[]},
  {id:5,name:'Mapa Mirage',category:'Mundo Gamer',price:70,image:'assets/mirage.jpg',description:'Mapa decorativo inspirado no cenário Mirage de CS2.',dimensions:'A confirmar',colors:[]},
